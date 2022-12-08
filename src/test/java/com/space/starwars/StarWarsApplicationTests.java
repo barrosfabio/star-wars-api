@@ -1,10 +1,10 @@
-package com.space.swapi;
+package com.space.starwars;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SwapiApplicationTests {
+class StarWarsApplicationTests {
 
 	@Test
 	void contextLoads() {

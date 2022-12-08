@@ -1,0 +1,14 @@
+version: '1.0'
+
+services:
+  mongo:
+    container_name: mongo.space
+    image: mongo
+    ports:
+      - "37017:27017"
+    networks:
+      - bubble
+
+networks:
+  bubble:
+    external: true
