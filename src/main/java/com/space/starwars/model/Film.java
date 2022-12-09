@@ -21,5 +21,6 @@ public class Film {
     private String title;
     private String director;
     private LocalDate releaseDate;
+    private String url;
 
 }

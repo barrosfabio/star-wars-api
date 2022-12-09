@@ -3,6 +3,7 @@ package com.space.starwars.integration.payload;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author Fabio Barros
  * @version 1.0 created on 08/12/2022
  */
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
