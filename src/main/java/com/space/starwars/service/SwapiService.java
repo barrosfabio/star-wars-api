@@ -30,7 +30,7 @@ public class SwapiService {
         var swapiPlanetResponse = swapiClient.getPlanetById(planetId);
         var filteredFilmList = filterFilmsByPlanet(swapiPlanetResponse.getFilms());
 
-        return Optional.of(swapiPlanetResponseMapper.of(swapiPlanetResponse, planetId, filteredFilmList));
+        return Optional.ofNullable(swapiPlanetResponseMapper.of(swapiPlanetResponse, planetId, filteredFilmList));
     }
 
     public List<Film> getAllFilms(){

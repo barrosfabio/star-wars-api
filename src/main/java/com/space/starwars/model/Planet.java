@@ -24,7 +24,7 @@ public class Planet {
     @Indexed(unique = true)
     private String id;
     private String name;
-    private String climate;
-    private String terrain;
+    private List<String> climate;
+    private List<String> terrain;
     private List<Film> films;
 }

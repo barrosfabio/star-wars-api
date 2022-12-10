@@ -4,22 +4,23 @@ import com.space.starwars.integration.SwapiClient;
 import com.space.starwars.integration.payload.SwapiFilmResponse;
 import com.space.starwars.integration.payload.SwapiListFilmResponse;
 import com.space.starwars.integration.payload.SwapiPlanetResponse;
-import com.space.starwars.model.Film;
-import com.space.starwars.model.mapper.SwapiListFilmResponseMapper;
-import com.space.starwars.model.mapper.SwapiPlanetResponseMapper;
+
+import com.space.starwars.model.mapper.impl.SwapiListFilmResponseMapperImpl;
+import com.space.starwars.model.mapper.impl.SwapiPlanetResponseMapperImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
@@ -37,17 +38,19 @@ class SwapiServiceTest {
     @Mock
     private SwapiClient swapiClient;
 
-    @Spy
-    private SwapiListFilmResponseMapper swapiListFilmResponseMapper;
+    @Mock
+    private SwapiListFilmResponseMapperImpl swapiListFilmResponseMapper;
 
-    @Spy
-    private SwapiPlanetResponseMapper swapiPlanetResponseMapper;
+    @Mock
+    private SwapiPlanetResponseMapperImpl swapiPlanetResponseMapper;
 
     @Test
     void testGetPlanetById(){
         // Given
-        when(swapiClient.getPlanetById(PLANET_ID)).thenReturn(createMockPlanet());
+        when(swapiClient.getPlanetById(PLANET_ID)).thenReturn(createMockPlanetResponse());
         when(swapiClient.getAllFilms()).thenReturn(mockAllFilmsSwapiResponse());
+        when(swapiListFilmResponseMapper.of(any(List.class))).thenCallRealMethod();
+        when(swapiPlanetResponseMapper.of(any(SwapiPlanetResponse.class), anyString(), any(List.class))).thenCallRealMethod();
 
         // When
         var planet = swapiService.getPlanetById(PLANET_ID);
@@ -57,7 +60,7 @@ class SwapiServiceTest {
         assertNotNull(planet.get());
     }
 
-    private SwapiPlanetResponse createMockPlanet(){
+    private SwapiPlanetResponse createMockPlanetResponse(){
         return SwapiPlanetResponse.builder()
                 .name("Yavin IV")
                 .rotationPeriod("24")
