@@ -3,6 +3,7 @@ package com.space.starwars.controller;
 import com.space.starwars.model.Planet;
 import com.space.starwars.service.PlanetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class PlanetController {
     }
 
     @GetMapping("/planets/list")
-    public List<Planet> getAllPlanets(){
-        return planetService.findAllPlanets();
+    public Page<Planet> getAllPlanets(@RequestParam(name = "page") Integer page){
+        return planetService.findAllPlanets(page);
     }
 
     @GetMapping("/planets")

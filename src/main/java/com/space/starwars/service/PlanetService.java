@@ -4,6 +4,9 @@ import com.space.starwars.model.Planet;
 import com.space.starwars.repository.PlanetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PlanetService {
+
+    private static final Integer PAGE_SIZE = 5;
 
     private final SwapiService swapiService;
 
@@ -44,8 +49,10 @@ public class PlanetService {
                 .orElseThrow(() -> new Exception("Planet not found"));
     }
 
-    public List<Planet> findAllPlanets(){
-        return planetRepository.findAll();
+    public Page<Planet> findAllPlanets(final Integer page){
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+
+        return planetRepository.findAll(pageable);
     }
 
     public void deletePlanetById(final String planetId){
