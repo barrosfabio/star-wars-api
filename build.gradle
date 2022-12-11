@@ -28,13 +28,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache:2.7.5'
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.2'
 
+	// Lombok
+	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
 	// MapStruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
-	// Lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 
 	// Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

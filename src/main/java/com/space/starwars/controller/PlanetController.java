@@ -1,12 +1,15 @@
 package com.space.starwars.controller;
 
 import com.space.starwars.model.Planet;
+import com.space.starwars.model.payload.PagePlanetResponse;
 import com.space.starwars.service.PlanetService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 /**
  * @author Fabio Barros
@@ -24,8 +27,8 @@ public class PlanetController {
     }
 
     @GetMapping("/planets/list")
-    public Page<Planet> getAllPlanets(@RequestParam(name = "page") Integer page){
-        return planetService.findAllPlanets(page);
+    public PagePlanetResponse getAllPlanets(@RequestParam(name = "page") Integer page, @RequestParam(name = "pageSize") Integer pageSize){
+        return planetService.findAllPlanets(page, pageSize);
     }
 
     @GetMapping("/planets")
