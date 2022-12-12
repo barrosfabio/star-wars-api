@@ -62,6 +62,7 @@ jacocoTestReport {
 					"com/space/starwars/integration/payload/*",
 					"com/space/starwars/config/*",
 					"com/space/starwars/exception/payload/*",
+					"com/space/starwars/StarWarsApplication.java",
 			])
 		}))
 	}

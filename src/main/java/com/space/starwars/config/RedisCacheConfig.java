@@ -21,14 +21,11 @@ import java.time.Duration;
 @Configuration
 @RequiredArgsConstructor
 public class RedisCacheConfig {
-
     public static final String ALL_FILMS_CACHE = "all-films-cache";
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(){
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
-        redisStandaloneConfiguration.setPassword("Redis2022!");
-        redisStandaloneConfiguration.setUsername("default");
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 

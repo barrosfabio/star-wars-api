@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Fabio Barros
  * @version 1.0 created on 08/12/2022
  */
-@FeignClient(name = "swapiClient", url = "https://swapi.dev/api/")
+@FeignClient(name = "swapiClient", url = "${feign.url}")
 public interface SwapiClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/planets/{planetId}")
