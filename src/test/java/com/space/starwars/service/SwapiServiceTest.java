@@ -1,5 +1,6 @@
 package com.space.starwars.service;
 
+import com.space.starwars.config.RedisCacheConfig;
 import com.space.starwars.integration.SwapiClient;
 import com.space.starwars.integration.payload.SwapiFilmResponse;
 import com.space.starwars.integration.payload.SwapiListFilmResponse;
@@ -7,6 +8,7 @@ import com.space.starwars.integration.payload.SwapiPlanetResponse;
 
 import com.space.starwars.model.mapper.impl.SwapiListFilmResponseMapperImpl;
 import com.space.starwars.model.mapper.impl.SwapiPlanetResponseMapperImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,11 +46,32 @@ class SwapiServiceTest {
     @Mock
     private SwapiPlanetResponseMapperImpl swapiPlanetResponseMapper;
 
+    @Mock
+    private CacheService cacheService;
+
     @Test
-    void testGetPlanetById(){
+    @DisplayName("Get Planet by ID when all Films not in cache")
+    void testGetPlanetByIdWhenAllFilmsNotInCache(){
         // Given
         when(swapiClient.getPlanetById(PLANET_ID)).thenReturn(createMockPlanetResponse());
         when(swapiClient.getAllFilms()).thenReturn(mockAllFilmsSwapiResponse());
+        when(swapiListFilmResponseMapper.of(any(List.class))).thenCallRealMethod();
+        when(swapiPlanetResponseMapper.of(any(SwapiPlanetResponse.class), anyString(), any(List.class))).thenCallRealMethod();
+
+        // When
+        var planet = swapiService.getPlanetById(PLANET_ID);
+
+        // Then
+        assertEquals(2, planet.get().getFilms().size());
+        assertNotNull(planet.get());
+    }
+
+    @Test
+    @DisplayName("Get Planet by ID when all Films in cache")
+    void testGetPlanetByIdWhenAllFilmsInCache(){
+        // Given
+        when(swapiClient.getPlanetById(PLANET_ID)).thenReturn(createMockPlanetResponse());
+        when(cacheService.findCache(RedisCacheConfig.ALL_FILMS_CACHE, SwapiListFilmResponse.class)).thenReturn(mockAllFilmsSwapiResponse());
         when(swapiListFilmResponseMapper.of(any(List.class))).thenCallRealMethod();
         when(swapiPlanetResponseMapper.of(any(SwapiPlanetResponse.class), anyString(), any(List.class))).thenCallRealMethod();
 
