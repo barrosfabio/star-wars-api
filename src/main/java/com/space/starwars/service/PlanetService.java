@@ -1,5 +1,6 @@
 package com.space.starwars.service;
 
+import com.space.starwars.exception.PlanetNotFoundException;
 import com.space.starwars.model.Planet;
 import com.space.starwars.model.mapper.PagePlanetResponseMapper;
 import com.space.starwars.model.payload.PagePlanetResponse;
@@ -40,17 +41,17 @@ public class PlanetService {
 
     }
 
-    public Planet getPlanetByName(final String planetName) throws Exception {
+    public Planet getPlanetByName(final String planetName) throws PlanetNotFoundException {
         log.info("Retrieving Planet with name={}", planetName);
         return planetRepository.findPlanetByName(planetName)
-                .orElseThrow(() -> new Exception("Planet not found"));
+                .orElseThrow(() -> new PlanetNotFoundException());
 
     }
 
-    public Planet getPlanetById(final String planetId) throws Exception{
+    public Planet getPlanetById(final String planetId) throws PlanetNotFoundException{
         log.info("Retrieving Planet with id={} ", planetId);
         return planetRepository.findPlanetById(planetId)
-                .orElseThrow(() -> new Exception("Planet not found"));
+                .orElseThrow(() -> new PlanetNotFoundException());
     }
 
     public PagePlanetResponse findAllPlanets(final Integer page, final Integer pageSize){
