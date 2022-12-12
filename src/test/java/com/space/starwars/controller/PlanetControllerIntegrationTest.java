@@ -1,6 +1,7 @@
 package com.space.starwars.controller;
 
 import com.space.starwars.StarWarsApplication;
+import com.space.starwars.exception.NotFoundException;
 import com.space.starwars.integration.SwapiClient;
 import com.space.starwars.integration.payload.SwapiFilmResponse;
 import com.space.starwars.integration.payload.SwapiListFilmResponse;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -83,6 +85,20 @@ class PlanetControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Load Planet by ID when SWAPI integration throws exception")
+    void testLoadPlanetByIdWhenSwapiIntegrationThrowsException() throws Exception {
+        given(swapiClient.getAllFilms()).willReturn(mockAllFilmsSwapiResponse());
+        given(swapiClient.getPlanetById(PLANET_ID)).willThrow(NotFoundException.class);
+
+        mockMvc.perform(post(PLANETS_RESOURCE_URL + "/" + PLANET_ID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$.code", Matchers.is(HttpStatus.NOT_FOUND.value())));
+
+    }
+
+    @Test
     @DisplayName("Get Planet by name")
     void testGetPlanetByName() throws Exception {
 
@@ -98,6 +114,19 @@ class PlanetControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Get Planet by name then throw PlanetNotFoundException")
+    void testGetPlanetByNameThenThrowPlanetNotFoundException() throws Exception {
+
+        mockMvc.perform(get(PLANETS_RESOURCE_URL)
+                        .param("planetName", PLANET_NAME)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$.code", Matchers.is(HttpStatus.NOT_FOUND.value())));
+
+    }
+
+    @Test
     @DisplayName("Get Planet by ID")
     void testGetPlanetById() throws Exception {
 
@@ -108,6 +137,18 @@ class PlanetControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.id", Matchers.is(PLANET_ID)));
+
+    }
+
+    @Test
+    @DisplayName("Get Planet by ID then throw PlanetNotFoundException")
+    void testGetPlanetByIdThenThrowPlanetNotFoundException() throws Exception {
+
+        mockMvc.perform(get(PLANETS_RESOURCE_URL + "/" + PLANET_ID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$.code", Matchers.is(HttpStatus.NOT_FOUND.value())));
 
     }
 

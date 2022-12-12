@@ -60,7 +60,8 @@ jacocoTestReport {
 			fileTree(dir: it, exclude: [
 					"com/space/starwars/model/*",
 					"com/space/starwars/integration/payload/*",
-					"com/space/starwars/integration/config/*",
+					"com/space/starwars/config/*",
+					"com/space/starwars/exception/payload/*",
 			])
 		}))
 	}

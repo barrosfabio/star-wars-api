@@ -1,5 +1,3 @@
-version: '1.0'
-
 services:
   mongo:
     container_name: mongo.space
@@ -8,6 +6,12 @@ services:
       - "37017:27017"
     networks:
       - bubble
+
+  redis:
+    image: redis
+    command: redis-server --requirepass Redis2022!
+    ports:
+      - "6379:6379"
 
 networks:
   bubble:

@@ -32,12 +32,12 @@ public class PlanetController {
     }
 
     @GetMapping("/planets")
-    public Planet getPlanetByName(@RequestParam(name = "planetName") String planetName) throws Exception {
+    public Planet getPlanetByName(@RequestParam(name = "planetName") String planetName) {
         return planetService.getPlanetByName(planetName);
     }
 
     @GetMapping("/planets/{id}")
-    public Planet getPlanetById(@PathVariable("id") String planetId) throws Exception{
+    public Planet getPlanetById(@PathVariable("id") String planetId) {
         return planetService.getPlanetById(planetId);
     }
 
