@@ -1,5 +1,6 @@
 package com.space.starwars.service;
 
+import com.space.starwars.exception.PlanetNotFoundException;
 import com.space.starwars.model.Film;
 import com.space.starwars.model.Planet;
 import com.space.starwars.model.mapper.PagePlanetResponseMapperImpl;
@@ -107,7 +108,7 @@ class PlanetServiceTest {
     @DisplayName("Get Planet by name when Planet does not exist in DB")
     void testGetPlanetByNameWhenPlanetDoesNotExistInDB() throws Exception {
         // Given
-        var expectedMessage = "Planet not found";
+        var expectedMessage = PlanetNotFoundException.DEFAULT_MESSAGE;
         when(planetRepository.findPlanetByName(PLANET_NAME)).thenReturn(Optional.empty());
 
         // When
@@ -138,7 +139,7 @@ class PlanetServiceTest {
     @DisplayName("Get Planet by ID when Planet does not exist in DB")
     void testGetPlanetByIDWhenPlanetDoesNotExistInDB() throws Exception {
         // Given
-        var expectedMessage = "Planet not found";
+        var expectedMessage = PlanetNotFoundException.DEFAULT_MESSAGE;
         when(planetRepository.findPlanetById(PLANET_ID)).thenReturn(Optional.empty());
 
         // When
