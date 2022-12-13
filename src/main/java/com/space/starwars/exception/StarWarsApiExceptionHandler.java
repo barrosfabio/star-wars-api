@@ -19,7 +19,7 @@ public class StarWarsApiExceptionHandler extends ResponseEntityExceptionHandler 
     @ExceptionHandler(value = {NotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponsePayload handleNotFoundException(RuntimeException exception){
-        log.warn("Resource not found in the SWAPI public API, exception="+ exception);
+        log.warn("Resource not found in the SWAPI public API, exception={}", exception);
         return ErrorResponsePayload.builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message(exception.getMessage())
@@ -29,7 +29,7 @@ public class StarWarsApiExceptionHandler extends ResponseEntityExceptionHandler 
     @ExceptionHandler(value = {PlanetNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponsePayload handlePlanetNotFoundException(RuntimeException exception){
-        log.warn("Planet not found: exception="+ exception);
+        log.warn("Planet not found: exception={}", exception);
         return ErrorResponsePayload.builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message(exception.getMessage())

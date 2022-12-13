@@ -78,7 +78,7 @@ class PlanetControllerIntegrationTest {
 
         mockMvc.perform(post(PLANETS_RESOURCE_URL + "/" + PLANET_ID)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.id", Matchers.is(PLANET_ID)));
 

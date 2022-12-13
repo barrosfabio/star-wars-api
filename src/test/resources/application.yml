@@ -1,0 +1,28 @@
+cache:
+  hostname: localhost
+  password: Redis2022!
+  port: 6379
+  ttl: 24h
+feign:
+  url: https://swapi.dev/api/
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            mongo:
+              embedded: 'off'
+server:
+  port: 8081
+spring:
+  data:
+    mongodb:
+      database: local
+      host: localhost
+      port: 27017
+  mongodb:
+    embedded:
+      version: 6.0.1
+  profiles:
+    active: test

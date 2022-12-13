@@ -72,16 +72,13 @@ class PlanetServiceTest {
     @Test
     @DisplayName("Load Planet by ID when Planet does not exist in DB")
     void testLoadPlanetByIdWhenPlanetDoesNotExistInDB(){
-        // Given
         var createdPlanet = createPlanet(PLANET_ID, PLANET_NAME);
         when(planetRepository.findPlanetById(PLANET_ID)).thenReturn(Optional.empty());
         when(swapiService.getPlanetById(PLANET_ID)).thenReturn(Optional.ofNullable(createdPlanet));
         when(planetRepository.save(any(Planet.class))).thenReturn(createdPlanet);
 
-        // When
         var planet = planetService.loadPlanetById(PLANET_ID);
 
-        // Then
         assertEquals(PLANET_ID, planet.getId());
         assertEquals(PLANET_NAME, planet.getName());
         assertEquals(2, planet.getFilms().size());
@@ -92,13 +89,10 @@ class PlanetServiceTest {
     @Test
     @DisplayName("Get Planet by name when Planet exists in DB")
     void testGetPlanetByNameWhenPlanetExistsInDB() throws Exception {
-        // Given
         when(planetRepository.findPlanetByName(PLANET_NAME)).thenReturn(Optional.ofNullable(createPlanet(PLANET_ID, PLANET_NAME)));
 
-        // When
         var planet = planetService.getPlanetByName(PLANET_NAME);
 
-        // Then
         assertEquals(PLANET_ID, planet.getId());
         assertEquals(PLANET_NAME, planet.getName());
         assertEquals(2, planet.getFilms().size());
@@ -106,30 +100,24 @@ class PlanetServiceTest {
 
     @Test
     @DisplayName("Get Planet by name when Planet does not exist in DB")
-    void testGetPlanetByNameWhenPlanetDoesNotExistInDB() throws Exception {
-        // Given
+    void testGetPlanetByNameWhenPlanetDoesNotExistInDB() {
         var expectedMessage = PlanetNotFoundException.DEFAULT_MESSAGE;
         when(planetRepository.findPlanetByName(PLANET_NAME)).thenReturn(Optional.empty());
 
-        // When
-        var exception = assertThrows(Exception.class, () -> {
+        var exception = assertThrows(PlanetNotFoundException.class, () -> {
             planetService.getPlanetByName(PLANET_NAME);
                 });
 
-        // Then
         assertTrue(exception.getMessage().contains(expectedMessage));
     }
 
     @Test
     @DisplayName("Get Planet by ID when Planet exists in DB")
-    void testGetPlanetByIDWhenPlanetExistsInDB() throws Exception {
-        // Given
+    void testGetPlanetByIDWhenPlanetExistsInDB() {
         when(planetRepository.findPlanetById(PLANET_ID)).thenReturn(Optional.ofNullable(createPlanet(PLANET_ID, PLANET_NAME)));
 
-        // When
         var planet = planetService.getPlanetById(PLANET_ID);
 
-        // Then
         assertEquals(PLANET_ID, planet.getId());
         assertEquals(PLANET_NAME, planet.getName());
         assertEquals(2, planet.getFilms().size());
@@ -137,34 +125,28 @@ class PlanetServiceTest {
 
     @Test
     @DisplayName("Get Planet by ID when Planet does not exist in DB")
-    void testGetPlanetByIDWhenPlanetDoesNotExistInDB() throws Exception {
-        // Given
+    void testGetPlanetByIDWhenPlanetDoesNotExistInDB() {
         var expectedMessage = PlanetNotFoundException.DEFAULT_MESSAGE;
         when(planetRepository.findPlanetById(PLANET_ID)).thenReturn(Optional.empty());
 
-        // When
-        var exception = assertThrows(Exception.class, () -> {
+        var exception = assertThrows(PlanetNotFoundException.class, () -> {
             planetService.getPlanetById(PLANET_ID);
         });
 
-        // Then
         assertTrue(exception.getMessage().contains(expectedMessage));
     }
 
     @Test
     @DisplayName("List Planets when Planets exist in DB")
     void testListPlanetsWhenPlanetsExistInDB() throws Exception {
-        // Given
         var page = 1;
         var pageSize = 5;
         var pageable = PageRequest.of(page, pageSize);
         when(planetRepository.findAll(pageable)).thenReturn(createPlanetPage());
         when(pagePlanetResponseMapper.of(any(List.class), anyBoolean(), any(Integer.class))).thenCallRealMethod();
 
-        // When
         var pagePlanetResponse = planetService.findAllPlanets(page, pageSize);
 
-        // Then
         assertEquals(2, pagePlanetResponse.getPlanets().size());
         assertFalse(pagePlanetResponse.isHasNext());
         assertNull(pagePlanetResponse.getNextPage());
@@ -174,10 +156,8 @@ class PlanetServiceTest {
     @Test
     @DisplayName("Delete Planet by ID when Planet exists in DB")
     void testDeletePlanetByIDWhenPlanetExistsInDB() throws Exception {
-        // When
         planetService.deletePlanetById(PLANET_ID);
 
-        // Then
         verify(planetRepository, times(1)).deleteById(PLANET_ID);
     }
 

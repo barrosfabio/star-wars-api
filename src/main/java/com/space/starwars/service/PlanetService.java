@@ -21,18 +21,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PlanetService {
 
-    private static final Integer PAGE_SIZE = 5;
-
     private final SwapiService swapiService;
 
     private final PlanetRepository planetRepository;
 
     private final PagePlanetResponseMapper pagePlanetResponseMapper;
 
-    public Planet loadPlanetById(final String planetId){
+    public Planet loadPlanetById(final String planetId) {
         var planet = planetRepository.findPlanetById(planetId);
 
-        if(planet.isPresent()){
+        if (planet.isPresent()) {
             return planet.get();
         } else {
             log.info("Loading planet with id={} into the database", planetId);
@@ -48,21 +46,21 @@ public class PlanetService {
 
     }
 
-    public Planet getPlanetById(final String planetId) throws PlanetNotFoundException{
+    public Planet getPlanetById(final String planetId) throws PlanetNotFoundException {
         log.info("Retrieving Planet with id={} ", planetId);
         return planetRepository.findPlanetById(planetId)
                 .orElseThrow(() -> new PlanetNotFoundException());
     }
 
-    public PagePlanetResponse findAllPlanets(final Integer page, final Integer pageSize){
+    public PagePlanetResponse findAllPlanets(final Integer page, final Integer pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         log.info("Retrieving page={} with a pageSize={} of the Planets list", page, pageSize);
 
         Page<Planet> planetPage = planetRepository.findAll(pageable);
-        return pagePlanetResponseMapper.of(planetPage.getContent(), planetPage.hasNext(), planetPage.getNumber()+1);
+        return pagePlanetResponseMapper.of(planetPage.getContent(), planetPage.hasNext(), planetPage.getNumber() + 1);
     }
 
-    public void deletePlanetById(final String planetId){
+    public void deletePlanetById(final String planetId) {
         log.info("Deleting Planet with id={}", planetId);
         planetRepository.deleteById(planetId);
     }

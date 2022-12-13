@@ -1,6 +1,7 @@
 package com.space.starwars.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +22,21 @@ import java.time.Duration;
 @Configuration
 @RequiredArgsConstructor
 public class RedisCacheConfig {
+
+    @Value("${cache.hostname}")
+    private String hostName;
+
+    @Value("${cache.password}")
+    private String password;
+
+    @Value("#{T(java.lang.Integer).parseInt('${cache.port}')}")
+    private Integer port;
     public static final String ALL_FILMS_CACHE = "all-films-cache";
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(){
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(hostName, port);
+        redisStandaloneConfiguration.setPassword(password);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 

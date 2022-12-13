@@ -9,15 +9,13 @@ import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +42,7 @@ class CacheServiceTest {
 
     @Test
     @DisplayName("Find key from Redis Cache")
-    void testFindKeyFromRedisCache(){
+    void testFindKeyFromRedisCache() {
 
         when(redisTemplate.opsForValue().get(REDIS_KEY)).thenReturn(REDIS_STRING_VALUE);
 
@@ -56,7 +54,7 @@ class CacheServiceTest {
 
     @Test
     @DisplayName("Find key from Redis Cache then throw exception")
-    void testFindKeyFromRedisCacheThenThrowException(){
+    void testFindKeyFromRedisCacheThenThrowException() {
 
         when(redisTemplate.opsForValue()).thenThrow(NullPointerException.class);
 
@@ -93,7 +91,7 @@ class CacheServiceTest {
 
     @Test
     @DisplayName("Upsert key in Redis Cache")
-    void testUpsertKeyInRedisCache(){
+    void testUpsertKeyInRedisCache() {
 
         cacheService.updateCache(REDIS_KEY, REDIS_STRING_VALUE, Duration.ofHours(1));
 

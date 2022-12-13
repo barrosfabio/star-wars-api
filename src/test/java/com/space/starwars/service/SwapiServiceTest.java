@@ -52,16 +52,13 @@ class SwapiServiceTest {
     @Test
     @DisplayName("Get Planet by ID when all Films not in cache")
     void testGetPlanetByIdWhenAllFilmsNotInCache(){
-        // Given
         when(swapiClient.getPlanetById(PLANET_ID)).thenReturn(createMockPlanetResponse());
         when(swapiClient.getAllFilms()).thenReturn(mockAllFilmsSwapiResponse());
         when(swapiListFilmResponseMapper.of(any(List.class))).thenCallRealMethod();
         when(swapiPlanetResponseMapper.of(any(SwapiPlanetResponse.class), anyString(), any(List.class))).thenCallRealMethod();
 
-        // When
         var planet = swapiService.getPlanetById(PLANET_ID);
 
-        // Then
         assertEquals(2, planet.get().getFilms().size());
         assertNotNull(planet.get());
     }
@@ -69,16 +66,13 @@ class SwapiServiceTest {
     @Test
     @DisplayName("Get Planet by ID when all Films in cache")
     void testGetPlanetByIdWhenAllFilmsInCache(){
-        // Given
         when(swapiClient.getPlanetById(PLANET_ID)).thenReturn(createMockPlanetResponse());
         when(cacheService.findCache(RedisCacheConfig.ALL_FILMS_CACHE, SwapiListFilmResponse.class)).thenReturn(mockAllFilmsSwapiResponse());
         when(swapiListFilmResponseMapper.of(any(List.class))).thenCallRealMethod();
         when(swapiPlanetResponseMapper.of(any(SwapiPlanetResponse.class), anyString(), any(List.class))).thenCallRealMethod();
 
-        // When
         var planet = swapiService.getPlanetById(PLANET_ID);
 
-        // Then
         assertEquals(2, planet.get().getFilms().size());
         assertNotNull(planet.get());
     }

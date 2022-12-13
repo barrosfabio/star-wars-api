@@ -1,6 +1,5 @@
 package com.space.starwars.service;
 
-import com.space.starwars.config.RedisCacheConfig;
 import com.space.starwars.integration.SwapiClient;
 import com.space.starwars.integration.payload.SwapiListFilmResponse;
 import com.space.starwars.model.mapper.SwapiListFilmResponseMapper;
@@ -9,7 +8,7 @@ import com.space.starwars.model.Planet;
 import com.space.starwars.model.mapper.SwapiPlanetResponseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -28,6 +27,9 @@ import static com.space.starwars.config.RedisCacheConfig.ALL_FILMS_CACHE;
 @Service
 @RequiredArgsConstructor
 public class SwapiService {
+
+    @Value("#{T(java.time.Duration).parse('pt' + '${cache.ttl:1h}')}")
+    private Duration cacheTtl;
     private final SwapiClient swapiClient;
     private final SwapiListFilmResponseMapper swapiListFilmResponseMapper;
     private final SwapiPlanetResponseMapper swapiPlanetResponseMapper;
@@ -35,7 +37,7 @@ public class SwapiService {
     private final CacheService cacheService;
 
     public Optional<Planet> getPlanetById(final String planetId) {
-        log.info("Retrieving Star Wars planet with id=" + planetId);
+        log.info("Retrieving Star Wars planet from SWAPI Public API with id={}",planetId);
 
         var swapiPlanetResponse = swapiClient.getPlanetById(planetId);
         var filteredFilmList = filterFilmsByPlanet(swapiPlanetResponse.getFilms());
@@ -49,7 +51,7 @@ public class SwapiService {
      * @return a list with details of all Star Wars films
      */
     public List<Film> getAllFilms(){
-        log.info("Retrieving all Star Wars films...");
+        log.info("Retrieving all Star Wars films from the SWAPI Public API...");
 
         var allFilmsFromCache= cacheService.findCache(ALL_FILMS_CACHE, SwapiListFilmResponse.class);
 
@@ -57,7 +59,7 @@ public class SwapiService {
             return swapiListFilmResponseMapper.of(allFilmsFromCache.getResults());
         } else {
             var allFilmsFromSwapi = swapiClient.getAllFilms();
-            cacheService.updateCache(ALL_FILMS_CACHE, allFilmsFromSwapi, Duration.ofMinutes(10));
+            cacheService.updateCache(ALL_FILMS_CACHE, allFilmsFromSwapi, cacheTtl);
             return swapiListFilmResponseMapper.of(allFilmsFromSwapi.getResults());
         }
 
@@ -67,7 +69,7 @@ public class SwapiService {
      *  Method used to filter which of the Star Wars films were filmed in a specific planet
      *
      * @param planetFilmList: list of films that were filmed in a specific planet
-     * @return
+     * @return Films filmed in a specific planet
      */
     private List<Film> filterFilmsByPlanet(final List<String> planetFilmList) {
         var allFilms = getAllFilms();
