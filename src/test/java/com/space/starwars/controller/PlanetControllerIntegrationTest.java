@@ -52,7 +52,7 @@ class PlanetControllerIntegrationTest {
 
     private static final String PLANET_NAME = "Tatooine";
     private static final String PLANET_ID = "1";
-    private static final String PLANETS_RESOURCE_URL = "/planets";
+    private static final String PLANETS_RESOURCE_URL = "/v1/planets";
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 5;
 

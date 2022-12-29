@@ -26,16 +26,14 @@ public class SwapiListFilmResponseMapperImpl implements SwapiListFilmResponseMap
 
         List<Film> filmList = new ArrayList<>();
 
-        filmResponseList.stream().forEach(swapiFilmResponse -> {
-                    filmList.add(Film.builder()
-                            .id(getFilmIdFromUrl(swapiFilmResponse.getUrl()))
-                            .title(swapiFilmResponse.getTitle())
-                            .director(swapiFilmResponse.getDirector())
-                            .releaseDate(swapiFilmResponse.getReleaseDate())
-                            .url(swapiFilmResponse.getUrl())
-                            .build());
-                }
-        );
+        filmResponseList.forEach(swapiFilmResponse -> filmList.add(Film.builder()
+                .id(getFilmIdFromUrl(swapiFilmResponse.getUrl()))
+                .title(swapiFilmResponse.getTitle())
+                .director(swapiFilmResponse.getDirector())
+                .releaseDate(swapiFilmResponse.getReleaseDate())
+                .url(swapiFilmResponse.getUrl())
+                .build())
+                                );
 
         return filmList;
     }
@@ -43,7 +41,7 @@ public class SwapiListFilmResponseMapperImpl implements SwapiListFilmResponseMap
     private String getFilmIdFromUrl(String url){
         String [] urlSplitted = url.split("/");
 
-        return urlSplitted[urlSplitted.length-1];
+        return urlSplitted[urlSplitted.length - 1];
     }
 
 

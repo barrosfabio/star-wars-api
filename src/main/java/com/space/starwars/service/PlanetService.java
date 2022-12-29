@@ -28,35 +28,31 @@ public class PlanetService {
     private final PagePlanetResponseMapper pagePlanetResponseMapper;
 
     public Planet loadPlanetById(final String planetId) {
-        var planet = planetRepository.findPlanetById(planetId);
-
-        if (planet.isPresent()) {
-            return planet.get();
-        } else {
-            log.info("Loading planet with id={} into the database", planetId);
-            return planetRepository.save(swapiService.getPlanetById(planetId).get());
-        }
+        return planetRepository.findPlanetById(planetId)
+            .orElseGet(() -> {
+                log.info("Loading planet_id={} to the database...", planetId);
+                return planetRepository.save(swapiService.getPlanetById(planetId).get());
+            });
 
     }
 
     public Planet getPlanetByName(final String planetName) throws PlanetNotFoundException {
         log.info("Retrieving Planet with name={}", planetName);
         return planetRepository.findPlanetByName(planetName)
-                .orElseThrow(() -> new PlanetNotFoundException());
+                .orElseThrow(PlanetNotFoundException::new);
 
     }
 
     public Planet getPlanetById(final String planetId) throws PlanetNotFoundException {
         log.info("Retrieving Planet with id={} ", planetId);
         return planetRepository.findPlanetById(planetId)
-                .orElseThrow(() -> new PlanetNotFoundException());
+                .orElseThrow(PlanetNotFoundException::new);
     }
 
     public PagePlanetResponse findAllPlanets(final Integer page, final Integer pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize);
         log.info("Retrieving page={} with a pageSize={} of the Planets list", page, pageSize);
 
-        Page<Planet> planetPage = planetRepository.findAll(pageable);
+        Page<Planet> planetPage = planetRepository.findAll(PageRequest.of(page, pageSize));
         return pagePlanetResponseMapper.of(planetPage.getContent(), planetPage.hasNext(), planetPage.getNumber() + 1);
     }
 

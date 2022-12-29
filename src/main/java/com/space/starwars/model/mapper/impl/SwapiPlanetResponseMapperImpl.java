@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 @Component
 public class SwapiPlanetResponseMapperImpl implements SwapiPlanetResponseMapper {
 
-    private final static String COMMA_SEPARATOR = ",";
+    private static final String COMMA_SEPARATOR = ",";
+
     @Override
     public Planet of(SwapiPlanetResponse swapiPlanetResponse, String id, List<Film> films) {
         if ( swapiPlanetResponse == null && id == null && films == null ) {
@@ -46,8 +47,7 @@ public class SwapiPlanetResponseMapperImpl implements SwapiPlanetResponseMapper 
     private List<String> csvToList(String csvString){
         String[] elements = csvString.trim().split(COMMA_SEPARATOR);
 
-        return Arrays.asList(elements)
-                .stream()
+        return Arrays.stream(elements)
                 .map(String::trim)
                 .collect(Collectors.toList());
     }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,32 +20,33 @@ import org.springframework.web.bind.annotation.DeleteMapping;
  */
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/v1/planets")
 public class PlanetController {
 
     private final PlanetService planetService;
 
-    @PostMapping("/planets/{id}")
+    @PostMapping("/{id}")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Planet loadPlanetById(@PathVariable("id") String planetId){
         return planetService.loadPlanetById(planetId);
     }
 
-    @GetMapping("/planets/list")
+    @GetMapping("/list")
     public PagePlanetResponse getAllPlanets(@RequestParam(name = "page") Integer page, @RequestParam(name = "pageSize") Integer pageSize){
         return planetService.findAllPlanets(page, pageSize);
     }
 
-    @GetMapping("/planets")
+    @GetMapping
     public Planet getPlanetByName(@RequestParam(name = "planetName") String planetName) {
         return planetService.getPlanetByName(planetName);
     }
 
-    @GetMapping("/planets/{id}")
+    @GetMapping("/{id}")
     public Planet getPlanetById(@PathVariable("id") String planetId) {
         return planetService.getPlanetById(planetId);
     }
 
-    @DeleteMapping("/planets/{id}")
+    @DeleteMapping("/{id}")
     public void deletePlanetById(@PathVariable("id") String planetId){
         planetService.deletePlanetById(planetId);
     }

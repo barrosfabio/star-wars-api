@@ -8,6 +8,7 @@ services:
       - bubble
 
   redis:
+    container_name: redis.space
     image: redis
     command: redis-server --requirepass Redis2022!
     ports:
