@@ -16,7 +16,7 @@ public class ApiErrorDecoder implements ErrorDecoder {
             case 404:
                 return new NotFoundException(response.status(), "The requested resource was not found in the SWAPI public API");
             default:
-                return new Exception("Generic Exception");
+                return new Exception(response.reason());
         }
     }
 }

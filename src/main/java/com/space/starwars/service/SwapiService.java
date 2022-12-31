@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.space.starwars.config.RedisCacheConfig.ALL_FILMS_CACHE;
+import static com.space.starwars.utils.FilmUtils.getFilmIdFromUrl;
 
 /**
  * @author Fabio Barros
@@ -50,7 +52,7 @@ public class SwapiService {
      * Retrieve a list of all Star Wars films from the SWAPI public API
      * @return a list with details of all Star Wars films
      */
-    public List<Film> getAllFilms(){
+    public Map<String, Film> getAllFilms(){
         log.info("Retrieving all Star Wars films from the SWAPI Public API...");
 
         var allFilmsFromCache= cacheService.findCache(ALL_FILMS_CACHE, SwapiListFilmResponse.class);
@@ -73,13 +75,13 @@ public class SwapiService {
      */
     private List<Film> filterFilmsByPlanet(final List<String> planetFilmList) {
         var allFilms = getAllFilms();
-        return allFilms.stream()
-                .filter(film ->
-                        planetFilmList.stream()
-                                .anyMatch(planetFilm ->
-                                        planetFilm.equals(film.getUrl())
-                                )
-                ).collect(Collectors.toList());
+
+        return planetFilmList.stream()
+            .map(planetFilm -> {
+                var filmKey = getFilmIdFromUrl(planetFilm);
+                return allFilms.get(filmKey);
+            }).toList();
+
     }
 
 }

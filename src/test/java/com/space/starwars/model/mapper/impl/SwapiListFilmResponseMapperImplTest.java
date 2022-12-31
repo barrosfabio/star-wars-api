@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -27,17 +28,17 @@ class SwapiListFilmResponseMapperImplTest {
     @Test
     void testValidListFilmResponseMapping(){
 
-       var filmList = swapiListFilmResponseMapper.of(createListSwapiFilmResponse());
+       var filmMap = swapiListFilmResponseMapper.of(createListSwapiFilmResponse());
 
-       assertEquals(2, filmList.size());
+       assertEquals(2, filmMap.size());
     }
 
     @Test
     void testNullValidListFilmResponseMapping(){
 
-        List<Film> filmList = swapiListFilmResponseMapper.of(null);
+        var filmMap = swapiListFilmResponseMapper.of(null);
 
-        assertNull(filmList);
+        assertNull(filmMap);
     }
 
     private List<SwapiFilmResponse> createListSwapiFilmResponse(){

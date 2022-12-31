@@ -6,8 +6,11 @@ import com.space.starwars.model.mapper.SwapiListFilmResponseMapper;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.space.starwars.utils.FilmUtils.getFilmIdFromUrl;
 
 /**
  * @author Fabio Barros
@@ -19,14 +22,14 @@ public class SwapiListFilmResponseMapperImpl implements SwapiListFilmResponseMap
 
 
     @Override
-    public List<Film> of(List<SwapiFilmResponse> filmResponseList) {
+    public Map<String, Film> of(List<SwapiFilmResponse> filmResponseList) {
         if(filmResponseList == null){
             return null;
         }
 
-        List<Film> filmList = new ArrayList<>();
+        Map<String, Film> filmMap = new HashMap<>();
 
-        filmResponseList.forEach(swapiFilmResponse -> filmList.add(Film.builder()
+        filmResponseList.forEach(swapiFilmResponse -> filmMap.put(getFilmIdFromUrl(swapiFilmResponse.getUrl()), Film.builder()
                 .id(getFilmIdFromUrl(swapiFilmResponse.getUrl()))
                 .title(swapiFilmResponse.getTitle())
                 .director(swapiFilmResponse.getDirector())
@@ -35,14 +38,7 @@ public class SwapiListFilmResponseMapperImpl implements SwapiListFilmResponseMap
                 .build())
                                 );
 
-        return filmList;
+        return filmMap;
     }
-
-    private String getFilmIdFromUrl(String url){
-        String [] urlSplitted = url.split("/");
-
-        return urlSplitted[urlSplitted.length - 1];
-    }
-
 
 }

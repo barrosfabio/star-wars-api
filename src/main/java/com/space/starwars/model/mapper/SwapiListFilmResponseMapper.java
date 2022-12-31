@@ -4,6 +4,7 @@ import com.space.starwars.integration.payload.SwapiFilmResponse;
 import com.space.starwars.model.Film;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Fabio Barros
@@ -11,5 +12,5 @@ import java.util.List;
  */
 public interface SwapiListFilmResponseMapper {
 
-    List<Film> of(List<SwapiFilmResponse> filmResponseList);
+    Map<String, Film> of(List<SwapiFilmResponse> filmResponseList);
 }
