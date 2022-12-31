@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/planets")
-public class PlanetController {
+public class PlanetController implements IPlanetController {
 
     private final PlanetService planetService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/{planet_id}")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Planet loadPlanetById(@PathVariable("id") String planetId){
+    public Planet loadPlanetById(@PathVariable("planet_id") String planetId){
         return planetService.loadPlanetById(planetId);
     }
 
@@ -41,13 +41,13 @@ public class PlanetController {
         return planetService.getPlanetByName(planetName);
     }
 
-    @GetMapping("/{id}")
-    public Planet getPlanetById(@PathVariable("id") String planetId) {
+    @GetMapping("/{planet_id}")
+    public Planet getPlanetById(@PathVariable("planet_id") String planetId) {
         return planetService.getPlanetById(planetId);
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePlanetById(@PathVariable("id") String planetId){
+    @DeleteMapping("/{planet_id}")
+    public void deletePlanetById(@PathVariable("planet_id") String planetId){
         planetService.deletePlanetById(planetId);
     }
 

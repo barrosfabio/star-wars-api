@@ -1,5 +1,6 @@
 package com.space.starwars.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +23,14 @@ import java.util.List;
 public class Planet {
     @Id
     @Indexed(unique = true)
+    @Schema(description = "ID of the Planet", example = "1")
     private String id;
+    @Schema(description = "Name of the Planet", example = "Tatooine")
     private String name;
+    @Schema(description = "List of possible climates in this Planet", example = "arid, temperate")
     private List<String> climate;
+    @Schema(description = "List of possible types of terrain in this Planet", example = "mountain, desert")
     private List<String> terrain;
+    @Schema(description = "List of films where this Planet appeared")
     private List<Film> films;
 }

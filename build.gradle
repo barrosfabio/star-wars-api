@@ -28,6 +28,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache:2.7.5'
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.2'
 	implementation 'org.springframework.boot:spring-boot-starter-logging:2.7.5'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+
 
 	// Lombok
 	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
